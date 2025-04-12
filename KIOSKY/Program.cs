@@ -1,101 +1,116 @@
 ﻿using System;
 using BusinessDataLogic;
+using Common;
+using System.Collections.Generic;
 
-namespace fixedwmethds
+namespace fixedwmthds
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string[] menu = { "[1] [P50 Cheese Burgir]", "[2] [P40 Fries]", "[3] [P35 Sundae]", "[4] [P100 JollyPares]" };
-            List<string> receiptHistory = new List<string>();
-            ShowWelcomeMessage();
-            int start = GetUserChoice();
+            OrderService service = new OrderService();
 
-            while (start == 1)
+            Console.WriteLine("Welcome to Mcdollibee Binan!");
+            Console.Write("Press [1] to start your order: ");
+            string start = Console.ReadLine();
+
+            if (start != "1")
             {
-                List<string> currentOrder = new List<string>();
-                ShowMenu(menu);
-
-                string usrchoice;
-                while ((usrchoice = GetUserChoiceForOrder()) != "0")
+                Console.WriteLine("Exiting");
+                return;
+            }
+            bool menu = true;
+            while (menu)
+            {
+                Console.WriteLine("\nChoose Meal Types:");
+                Console.WriteLine("[1] TipidMeals");
+                Console.WriteLine("[2] SuperMeals");
+                Console.WriteLine("[3] SecretMeals");
+                Console.WriteLine("[4] CustomizeMeals");
+                Console.WriteLine("[5] View Order");
+                Console.WriteLine("[6] Remove Order");
+                Console.WriteLine("[0] Checkout");
+                Console.Write("Enter choice: ");
+                string choice = Console.ReadLine();
+                if (choice == "0")
                 {
-                    if (usrchoice == "5")
+                    Console.Write("Service type [1] Dine-in | [2] Take-out: ");
+                    string serviceType = Console.ReadLine();
+                    if (serviceType == "1") serviceType = "Dine-in";
+                    else serviceType = "Take-out";
+
+                    Console.WriteLine(service.GenerateReceipt(serviceType));
+                    menu = false;
+                }
+                else if (choice == "5")
+                {
+                    Console.WriteLine("\nYour Order:");
+                    for (int i = 0; i < service.Order.Count; i++)
                     {
-                        kiosdata.RemoveItemFromOrder(currentOrder);
+                        Console.WriteLine("[" + (i + 1) + "] " + service.Order[i].Name);
+                    }
+                }
+                else if (choice == "6")
+                {
+                    Console.WriteLine("\nWhich order to remove?");
+                    for (int i = 0; i < service.Order.Count; i++)
+                    {
+                        Console.WriteLine("[" + (i + 1) + "] " + service.Order[i].Name);
+                    }
+                    Console.Write("Enter number: ");
+                    string remove = Console.ReadLine();
+                    int index;
+                    if (int.TryParse(remove, out index))
+                    {
+                        Console.WriteLine(service.RemoveFromOrder(index - 1));
                     }
                     else
                     {
-                        kiosdata.ProcessOrder(usrchoice, currentOrder);
+                        Console.WriteLine("Invalid input.");
                     }
                 }
-
-                string serviceChoice = GetServiceChoice();
-                string receipt = kiosdata.GenerateReceipt(currentOrder, serviceChoice);
-                receiptHistory.Add(receipt);
-                Console.WriteLine(receipt);
-
-                Console.WriteLine("Would you like to make another order? (Press [1] for Yes, [0] for No)");
-                start = Convert.ToInt32(Console.ReadLine());
-
-                if (start == 0)
+                else
                 {
-                    Console.WriteLine("Thank you for coming! See you again!");
-                    break;
+                    string menus = "";
+                    if (choice == "1") menus = "Tipid";
+                    else if (choice == "2") menus = "Super";
+                    else if (choice == "3") menus = "Secret";
+                    else if (choice == "4") menus = "Customize";
+                    if (menus != "")
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine(menus + "Meals Meals:");
+                        List<Meal> meals = service.GetMealsByCategory(menus);
+
+                        for (int i = 0; i < meals.Count; i++)
+                        {
+                            Console.WriteLine("[" + meals[i].Id + "] " + meals[i].Name + " - P" + meals[i].Price);
+                        }
+                        Console.Write("Enter Choice : ");
+                        string mealIdStr = Console.ReadLine();
+                        int mealId;
+                        if (int.TryParse(mealIdStr, out mealId))
+                        {
+                            Console.WriteLine(service.AddToOrder(mealId));
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid input.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid Meals.");
+                    }
                 }
             }
         }
-
-        static void ShowWelcomeMessage()
-        {
-            Console.WriteLine("Welcome to Mcdollibee Binan! Please press [1] to Order.");
-        }
-        static int GetUserChoice()
-        {
-            int choice;
-            do
-            {
-                choice = Convert.ToInt32(Console.ReadLine());
-                if (choice != 1)
-                {
-                    Console.WriteLine("Invalid Input. Please press [1] to start ordering.");
-                }
-            } while (choice != 1);
-            return choice;
-        }
-        static void ShowMenu(string[] menu)
-        {
-            Console.WriteLine("Mcdollibee MENU:");
-            foreach (string item in menu)
-            {
-                Console.WriteLine(item);
-            }
-        }
-        static string GetUserChoiceForOrder()
-        {
-            Console.WriteLine("Choose your order by pressing numbers [1-4], or press [0] to exit.");
-            Console.WriteLine("Press [5] to remove item from your order cart.");
-            return Console.ReadLine();
-        }
-
-
-
-
-        static string GetServiceChoice()
-        {
-            string serviceChoice;
-            do
-            {
-                Console.WriteLine("Please service type : [1] Dine-in or [2] Take-out");
-                serviceChoice = Console.ReadLine();
-                if (serviceChoice != "1" && serviceChoice != "2")
-                {
-                    Console.WriteLine("Invalid input! Please select [1] for Dine-in or [2] for Take-out.");
-                }
-            } while (serviceChoice != "1" && serviceChoice != "2");
-
-            return serviceChoice == "1" ? "Dine-in" : "Takeout";
-        }
-
     }
 }
+
+
+
+
+
+

@@ -1,105 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using DataLogicc;
+using Common;
 
 namespace BusinessDataLogic
 {
-    public class kiosdata
+    public class OrderService
     {
-        public static string ProcessOrder(string usrchoice, List<string> currentOrder)
+        public List<Meal> Meals;
+        public List<Meal> Order;
+
+        public OrderService()
         {
-            switch (usrchoice)
-            {
-                case "1":
-                    currentOrder.Add("Cheese Burgir");
-                    return "Cheese Burgir Added!";
-                    break;
-                case "2":
-                    currentOrder.Add("Fries");
-                    return "Fries Added!";
-                    break;
-                case "3":
-                    currentOrder.Add("Sundae");
-                    return "Sundae Added!";
-                    break;
-                case "4":
-                    currentOrder.Add("JollyPares");
-                    return "JollyPares Added!";
-                    break;
-                default:
-                    return "Invalid Input. Please press [1-4] to order.";
-                    break;
-            }
+            MealDataService dataService = new MealDataService();
+            Meals = dataService.GetAllMeals();
+            Order = new List<Meal>();
         }
-
-        public static string RemoveItemFromOrder(List<string> currentOrder)
+        public List<Meal> GetMealsByCategory(string category)
         {
-            if (currentOrder.Count == 0)
+            List<Meal> result = new List<Meal>();
+            foreach (Meal meal in Meals)
             {
-                return "Your order cart is empty.";
+                if (meal.Menus == category)
+                {
+                    result.Add(meal);
+                }
             }
-
-            return "Choose your order by pressing numbers [1-4], or press [0] to exit.\nPress [5] to remove item from your order cart.";
-            for (int i = 0; i < currentOrder.Count; i++)
-            {
-                return $"{i + 1}. {currentOrder[i]}";
-            }
-
-            return "Press [0] to cancel.";
-            string removeChoice = Console.ReadLine();
-
-            if (removeChoice == "0")
-            {
-                return "Cancelled.";
-            }
-
-            int itemIndex;
-            if (int.TryParse(removeChoice, out itemIndex) && itemIndex >= 1 && itemIndex <= currentOrder.Count)
-            {
-                string removedItem = currentOrder[itemIndex - 1];
-                currentOrder.RemoveAt(itemIndex - 1);
-                return "Item removed.";
-            }
-            else
-            {
-                return "Invalid Input. Please choose [1-4] only.";
-            }
+            return result;
         }
-
-        public static string GenerateReceipt(List<string> currentOrder, string serviceChoice)
+        public string AddToOrder(int id)
         {
-            int totalAmount = 0;
-            string receipt = " Mcdollibee Receipt ";
-            receipt += $"Service: {serviceChoice}";
-            receipt += "Ordered Items:\n";
-
-            foreach (string item in currentOrder)
+            foreach (Meal meal in Meals)
             {
-                receipt += $"{item}\n";
-                totalAmount += GetItemPrice(item);
+                if (meal.Id == id)
+                {
+                    Order.Add(meal);
+                    return "Added: " + meal.Name;
+                }
             }
-            receipt += $"Total: P{totalAmount}\n";
-            receipt += "Thank you for your order! \n";
-            receipt += "Mcdollibee Binan.\n";
+            return "Meal not available.";
+        }
+        public string RemoveFromOrder(int index)
+        {
+            if (index >= 0 && index < Order.Count)
+            {
+                string name = Order[index].Name;
+                Order.RemoveAt(index);
+                return "Removed: " + name;
+            }
+            return "Invalid index.";
+        }
+        public string GenerateReceipt(string serviceType)
+        {
+            string receipt = "\nMcdollibee Receipt\n";
+            receipt += "Service: " + serviceType + "\n";
+            receipt += "Items:\n";
+            int total = 0;
+            foreach (Meal meal in Order)
+            {
+                receipt += "- " + meal.Name + " - P" + meal.Price + "\n";
+                total += meal.Price;
+            }
+            receipt += "Total: P" + total + "\n";
+            receipt += "Thank you! See us Again!\n";
             return receipt;
-        }
-        public static int GetItemPrice(string item)
-        {
-            switch (item)
-            {
-                case "Cheese Burgir":
-                    return 50;
-                case "Fries":
-                    return 40;
-                case "Sundae":
-                    return 35;
-                case "JollyPares":
-                    return 100;
-                default:
-                    return 0;
-            }
         }
     }
 }
+
+
+
+
+
+
