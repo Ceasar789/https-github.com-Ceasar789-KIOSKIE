@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessDataLogic", "Busine
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiosky_common", "kioskymenudata\kiosky_common.csproj", "{4F94468C-F694-42A8-8C3A-604B446C211B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalugic", "Datalugic\Datalugic.csproj", "{B8785C1B-16DB-4CEF-97C2-0D22C7DE4221}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalogic", "Datalugic\Datalogic.csproj", "{B8785C1B-16DB-4CEF-97C2-0D22C7DE4221}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
