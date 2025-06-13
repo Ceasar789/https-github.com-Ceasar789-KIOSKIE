@@ -3,102 +3,81 @@ using System.Collections.Generic;
 using System.IO;
 using Common;
 
-namespace BusinessDataLogic
+namespace DataLogicc
 {
-    public class TextFileMealDataService
+    public class TextFileMealDataService : IMealDataService
     {
-        string filePath = "";
-        public List<Meal> Meals;
-        public List<Meal> Order;
+        string filePath = "meals.txt";
+        List<Meal> meals;
 
         public TextFileMealDataService()
         {
-            Meals = new List<Meal>();
-            Order = new List<Meal>();
-            LoadMealsFromFile();
-        }
-
-        private void LoadMealsFromFile()
-        {
-            var lines = File.ReadAllLines(filePath);
-
-            foreach (var line in lines)
+            meals = new List<Meal>();
+            if (File.Exists(filePath))
             {
-                var parts = line.Split('|');
-                Meals.Add(new Meal
+                var lines = File.ReadAllLines(filePath);
+                foreach (var line in lines)
                 {
-                    Id = Convert.ToInt32(parts[0]),
-                    Name = parts[1],
-                    Price = Convert.ToInt32(parts[2]),
-                    Menus = parts[3]
-                });
-            }
-        }
-
-        public List<Meal> GetMealsByCategory(string category)
-        {
-            List<Meal> result = new List<Meal>();
-            foreach (Meal meal in Meals)
-            {
-                if (meal.Menus == category)
-                {
-                    result.Add(meal);
+                    var parts = line.Split('|');
+                    Meal meal = new Meal();
+                    meal.Id = Convert.ToInt32(parts[0]);
+                    meal.Name = parts[1];
+                    meal.Price = Convert.ToInt32(parts[2]);
+                    meal.Menus = parts[3];
+                    meals.Add(meal);
                 }
             }
-            return result;
         }
 
-        public string AddToOrder(int id)
+        public List<Meal> GetAllMeals()
         {
-            foreach (Meal meal in Meals)
+            return meals;
+        }
+
+        public void AddMeal(Meal meal)
+        {
+            meals.Add(meal);
+            Save();
+        }
+
+        public void UpdateMeal(Meal meal)
+        {
+            for (int i = 0; i < meals.Count; i++)
             {
-                if (meal.Id == id)
+                if (meals[i].Id == meal.Id)
                 {
-                    Order.Add(meal);
-                    return "Added: " + meal.Name;
+                    meals[i] = meal;
+                    break;
                 }
             }
-            return "Meal not available.";
+            Save();
         }
 
-        public string RemoveFromOrder(int index)
+        public void RemoveMeal(int id)
         {
-            if (index >= 0 && index < Order.Count)
+            for (int i = 0; i < meals.Count; i++)
             {
-                string name = Order[index].Name;
-                Order.RemoveAt(index);
-                return "Removed: " + name;
+                if (meals[i].Id == id)
+                {
+                    meals.RemoveAt(i);
+                    break;
+                }
             }
-            return "Invalid index.";
+            Save();
         }
 
-        public string GenerateReceipt(string serviceType)
+        private void Save()
         {
-            string receipt = "\nMcdollibee Receipt\n";
-            receipt += "Service: " + serviceType + "\n";
-            receipt += "Items:\n";
-            int total = 0;
-            foreach (Meal meal in Order)
+            string[] lines = new string[meals.Count];
+            for (int i = 0; i < meals.Count; i++)
             {
-                receipt += "- " + meal.Name + " - P" + meal.Price + "\n";
-                total += meal.Price;
+                lines[i] = meals[i].Id + "|" + meals[i].Name + "|" + meals[i].Price + "|" + meals[i].Menus;
             }
-            receipt += "Total: P" + total + "\n";
-            receipt += "Thank you! See us Again!\n";
-            return receipt;
-        }
-
-        public void SaveMealsToFile()
-        {
-            var lines = new string[Meals.Count];
-
-            for (int i = 0; i < Meals.Count; i++)
-            {
-                lines[i] = $"{Meals[i].Id}|{Meals[i].Name}|{Meals[i].Price}|{Meals[i].Menus}";
-            }
-
             File.WriteAllLines(filePath, lines);
         }
     }
 }
+
+
+
 
