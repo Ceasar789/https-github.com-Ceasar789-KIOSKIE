@@ -4,12 +4,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35828.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIOSKY", "KIOSKY\KIOSKY.csproj", "{01781D78-1CB8-4AAB-AB13-B91819D88B39}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F94468C-F694-42A8-8C3A-604B446C211B} = {4F94468C-F694-42A8-8C3A-604B446C211B}
+		{537F2D87-5AAE-42B3-BE2D-C42E34AD135A} = {537F2D87-5AAE-42B3-BE2D-C42E34AD135A}
+		{D811D9F0-ABE8-4F13-BD17-06331DE80AC7} = {D811D9F0-ABE8-4F13-BD17-06331DE80AC7}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessDataLogic", "BusinessDataLogic\BusinessDataLogic.csproj", "{24F23AD3-83C8-4341-A2E2-8D0C5E87E91D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kiosky_common", "kioskymenudata\kiosky_common.csproj", "{4F94468C-F694-42A8-8C3A-604B446C211B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Datalogic", "Datalugic\Datalogic.csproj", "{B8785C1B-16DB-4CEF-97C2-0D22C7DE4221}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kioskieform", "Kioskieform\Kioskieform.csproj", "{537F2D87-5AAE-42B3-BE2D-C42E34AD135A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KIOSKIEFORM2", "KIOSKIEFORM2\KIOSKIEFORM2.csproj", "{D811D9F0-ABE8-4F13-BD17-06331DE80AC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplicationkioskie", "WebApplicationkioskie\WebApplicationkioskie.csproj", "{7F12FAC6-15F2-40A0-87C6-871667AFB1DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +44,18 @@ Global
 		{B8785C1B-16DB-4CEF-97C2-0D22C7DE4221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8785C1B-16DB-4CEF-97C2-0D22C7DE4221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8785C1B-16DB-4CEF-97C2-0D22C7DE4221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{537F2D87-5AAE-42B3-BE2D-C42E34AD135A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{537F2D87-5AAE-42B3-BE2D-C42E34AD135A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{537F2D87-5AAE-42B3-BE2D-C42E34AD135A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{537F2D87-5AAE-42B3-BE2D-C42E34AD135A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D811D9F0-ABE8-4F13-BD17-06331DE80AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D811D9F0-ABE8-4F13-BD17-06331DE80AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D811D9F0-ABE8-4F13-BD17-06331DE80AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D811D9F0-ABE8-4F13-BD17-06331DE80AC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F12FAC6-15F2-40A0-87C6-871667AFB1DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F12FAC6-15F2-40A0-87C6-871667AFB1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F12FAC6-15F2-40A0-87C6-871667AFB1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F12FAC6-15F2-40A0-87C6-871667AFB1DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,24 +9,27 @@ namespace BusinessDataLogic
         public List<Meal> Meals;
         public List<Meal> Order;
 
-        public OrderService()
+        private IMealDataService dataService;
+        public OrderService(IMealDataService dataService)
         {
-            MealDataService dataService = new MealDataService();
+            this.dataService = dataService;
             Meals = dataService.GetAllMeals();
             Order = new List<Meal>();
         }
+
         public List<Meal> GetMealsByCategory(string category)
         {
             List<Meal> result = new List<Meal>();
             foreach (Meal meal in Meals)
             {
-                if (meal.Menus == category)
+                if (meal.Menus.Equals(category, StringComparison.OrdinalIgnoreCase))
                 {
                     result.Add(meal);
                 }
             }
             return result;
         }
+
         public string AddToOrder(int id)
         {
             foreach (Meal meal in Meals)
@@ -34,11 +37,13 @@ namespace BusinessDataLogic
                 if (meal.Id == id)
                 {
                     Order.Add(meal);
+                    (dataService as DBMealDataService)?.SaveOrder(meal, meal.ServiceType);
                     return "Added: " + meal.Name;
                 }
             }
             return "Meal not available.";
         }
+
         public string RemoveFromOrder(int index)
         {
             if (index >= 0 && index < Order.Count)
@@ -49,6 +54,7 @@ namespace BusinessDataLogic
             }
             return "Invalid index.";
         }
+
         public string GenerateReceipt(string serviceType)
         {
             string receipt = "\nMcdollibee Receipt\n";
@@ -64,11 +70,29 @@ namespace BusinessDataLogic
             receipt += "Thank you! See us Again!\n";
             return receipt;
         }
+        public void SaveOrderDetails(string filename, string serviceType)
+        {
+            List<string> lines = new List<string>();
+            lines.Add("Mcdollibee Order Details");
+            lines.Add("Items Ordered:");
+
+            int total = 0;
+            int count = 1;
+
+            foreach (var meal in Order)
+            {
+                lines.Add($"{count}. {meal.Name} - P{meal.Price}");
+                total += meal.Price;
+                count++;
+            }
+
+            lines.Add("Total Price: P" + total);
+            lines.Add("Service Type: " + serviceType);
+            lines.Add("Thank you for your order!");
+
+            System.IO.File.AppendAllLines(filename, lines);
+
+        }
+
     }
 }
-
-
-
-
-
-

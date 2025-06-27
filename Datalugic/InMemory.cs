@@ -9,7 +9,6 @@ namespace DataLogicc
 
         static InMemoryMealDataService()
         {
-            // Initialize meals only once
             _meals = new List<Meal>
             {
                 new Meal { Id = 1, Name = "Big Mac & Drinks", Price = 89, Menus = "Tipid" },

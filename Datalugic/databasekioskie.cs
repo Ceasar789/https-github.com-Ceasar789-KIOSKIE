@@ -9,14 +9,14 @@ namespace DataLogicc
     public class DBMealDataService : IMealDataService
     {
         static string connectionString =
-            "";
+            "Server=DESKTOP-6GUPJLQ\\SQLEXPRESS;Database=MealDB;Trusted_Connection=True;Encrypt=False;";
 
         public List<Meal> GetAllMeals()
         {
             var meals = new List<Meal>();
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "SELECT Id, Name, Price, Menus FROM Meals";
+                string query = "SELECT Id, Meal AS Name, Price, Menus, ServiceType FROM Meals";
                 SqlCommand command = new SqlCommand(query, conn);
 
                 conn.Open();
@@ -29,7 +29,8 @@ namespace DataLogicc
                         Id = Convert.ToInt32(reader["Id"]),
                         Name = reader["Name"].ToString(),
                         Price = Convert.ToInt32(reader["Price"]),
-                        Menus = reader["Menus"].ToString()
+                        Menus = reader["Menus"].ToString(),
+                        ServiceType = reader["ServiceType"].ToString()
                     };
                     meals.Add(meal);
                 }
@@ -44,12 +45,13 @@ namespace DataLogicc
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "INSERT INTO Meals (Id, Name, Price, Menus) VALUES (@Id, @Name, @Price, @Menus)";
+                string query = "INSERT INTO Meals (Id, Meal, Price, Menus, ServiceType) VALUES (@Id, @Name, @Price, @Menus, @ServiceType)";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", meal.Id);
                 cmd.Parameters.AddWithValue("@Name", meal.Name);
                 cmd.Parameters.AddWithValue("@Price", meal.Price);
                 cmd.Parameters.AddWithValue("@Menus", meal.Menus);
+                cmd.Parameters.AddWithValue("@ServiceType", meal.ServiceType);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -61,12 +63,13 @@ namespace DataLogicc
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "UPDATE Meals SET Name = @Name, Price = @Price, Menus = @Menus WHERE Id = @Id";
+                string query = "UPDATE Meals SET Meal = @Name, Price = @Price, Menus = @Menus, ServiceType = @ServiceType WHERE Id = @Id";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Id", meal.Id);
                 cmd.Parameters.AddWithValue("@Name", meal.Name);
                 cmd.Parameters.AddWithValue("@Price", meal.Price);
                 cmd.Parameters.AddWithValue("@Menus", meal.Menus);
+                cmd.Parameters.AddWithValue("@ServiceType", meal.ServiceType);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -87,5 +90,23 @@ namespace DataLogicc
                 conn.Close();
             }
         }
+
+        public void SaveOrder(Meal meal, string serviceType)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO Orders (MealId, MealName, Price, ServiceType) VALUES (@MealId, @MealName, @Price, @ServiceType)";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@MealId", meal.Id);
+                cmd.Parameters.AddWithValue("@MealName", meal.Name);
+                cmd.Parameters.AddWithValue("@Price", meal.Price);
+                cmd.Parameters.AddWithValue("@ServiceType", serviceType);
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
+
     }
 }

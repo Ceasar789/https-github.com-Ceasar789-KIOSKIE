@@ -2,6 +2,7 @@
 using BusinessDataLogic;
 using Common;
 using System.Collections.Generic;
+using DataLogicc;
 
 namespace fixedwmthds
 {
@@ -9,7 +10,9 @@ namespace fixedwmthds
     {
         static void Main(string[] args)
         {
-            OrderService service = new OrderService();
+            IMealDataService dataService = new DBMealDataService();
+
+            OrderService service = new OrderService(dataService);
 
             Console.WriteLine("Welcome to Mcdollibee Binan!");
             Console.Write("Press [1] to start your order: ");
@@ -41,8 +44,10 @@ namespace fixedwmthds
                     else serviceType = "Take-out";
 
                     Console.WriteLine(service.GenerateReceipt(serviceType));
+                    service.SaveOrderDetails("meals.txt", serviceType);
                     menu = false;
                 }
+
                 else if (choice == "5")
                 {
                     Console.WriteLine("\nYour Order:");

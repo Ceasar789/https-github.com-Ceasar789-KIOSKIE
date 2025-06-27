@@ -3,11 +3,13 @@ namespace Common
 {
     public class Meal
     {
-        public int Id;
-        public string Name;
-        public int Price;
-        public string Menus;
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Price { get; set; }
+        public string Menus { get; set; }
+        public string ServiceType { get; set; }
     }
+
 }
 
 
