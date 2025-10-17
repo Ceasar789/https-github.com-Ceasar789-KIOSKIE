@@ -12,4 +12,10 @@
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BusinessDataLogic\BusinessDataLogic.csproj" />
+    <ProjectReference Include="..\Datalugic\Datalogic.csproj" />
+    <ProjectReference Include="..\kioskymenudata\kiosky_common.csproj" />
+  </ItemGroup>
+
 </Project>
