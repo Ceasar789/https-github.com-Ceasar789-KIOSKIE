@@ -1,0 +1,5 @@
+Mcdollibee Order Details
+Items Ordered:
+Total Price: P0
+Service Type: Dine In
+Thank you for your order!

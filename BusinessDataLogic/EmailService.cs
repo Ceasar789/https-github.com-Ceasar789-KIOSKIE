@@ -1,12 +1,31 @@
 ﻿using System;
 using System.Net;
 using System.Net.Mail;
-using Common;
+using System.Threading.Tasks;
+using kiosky_common;
 
-namespace Business
+namespace Common
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
+       
+        public async Task SendEmailAsync(string toEmail, string subject, string body, bool isHtml = true)
+        {
+            using var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("ace85772397f0b", "76248e07f7d761"),
+                EnableSsl = true
+            };
+
+            using var message = new MailMessage("from@example.com", toEmail, subject, body)
+            {
+                IsBodyHtml = isHtml
+            };
+
+            await client.SendMailAsync(message);
+        }
+
+        
         public string SendEmail(EmailMessage email)
         {
             try
@@ -17,12 +36,17 @@ namespace Business
                     EnableSsl = true
                 };
 
-                client.Send(email.From, email.To, email.Subject, email.Body);
-                return " Email sent successfully!";
+                var message = new MailMessage(email.From, email.To, email.Subject, email.Body)
+                {
+                    IsBodyHtml = true
+                };
+
+                client.Send(message);
+                return "Email sent successfully!";
             }
             catch (Exception ex)
             {
-                return $" Email failed: {ex.Message}";
+                return "Failed to send email: " + ex.Message;
             }
         }
     }

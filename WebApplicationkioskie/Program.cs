@@ -1,20 +1,37 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Common;
+using BusinessDataLogic;
+using DataLogicc;
+using kiosky_common;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers(); 
-https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddSingleton<IEmailService, EmailService>();
+
+
+builder.Services.AddScoped<IMealDataService, DBMealDataService>();
+builder.Services.AddScoped<OrderService>();
+
+
+builder.Services.AddControllers();
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
+
+
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
 
 app.MapControllers();
